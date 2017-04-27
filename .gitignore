@@ -1,0 +1,32 @@
+## Directory-based project format
+.idea/
+gc.log
+
+## File-based project format
+*.iml
+
+**/**/node_modules
+tools/mock/logs/**
+
+# Release package
+target/
+.project
+.classpath
+.settings
+pact/channel-adapter-b2c-mono.json
+pact/channel-adapter-payment-intg.json
+pact/channel-adapter-pricing.json
+pact/channel-adapter-sip-dump.json
+pact/channel-adapter-siptest.json
+pact/channel-adapter-attachment.json
+pact/channel-adapter-channel-lcm.json
+pact/channel-adapter-productivity.json
+pact/channel-adapter-tax-engine-dump.json
+pact/channel-adapter-inventory.json
+test/pact/test.json
+tools/mock/package/logs/
+*/*.log
+
+
+                   
+      
