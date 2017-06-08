@@ -13,11 +13,13 @@ public class CyclicBarrierTest1 {
 
     private static CyclicBarrier cyclicBarrier;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws BrokenBarrierException, InterruptedException {
         cyclicBarrier = new CyclicBarrier(SIZE);
         for(int i=0;i<SIZE;i++) {
-            new Thread(new Inner()).start();
+            Thread t = new Thread(new Inner());
+            t.start();
         }
+
     }
 
     static class Inner implements Runnable {
