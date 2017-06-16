@@ -11,22 +11,24 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class PutTaskTest {
 
-    private static final ExecutorService pool = Executors.newCachedThreadPool();
+    private static final ExecutorService pool = Executors.newFixedThreadPool(1);
     private final AtomicInteger putSum = new AtomicInteger(0);
     private final AtomicInteger takeSum = new AtomicInteger(0);
     private final CyclicBarrier barrier;
     private final BoundedBuffer<Integer> bb;
     private final int nTrials, nParis;
+    private final BarrierTimer timer;
 
     PutTaskTest(int capacity, int nParis, int nTrials) {
         this.bb = new BoundedBuffer<Integer>(capacity);
         this.nTrials = nTrials;
         this.nParis = nParis;
-        this.barrier = new CyclicBarrier(nParis * 2 + 1);
+        this.timer = new BarrierTimer();
+        this.barrier = new CyclicBarrier(nParis * 2 + 1, timer);
     }
 
     public static void main(String[] args) {
-        new PutTaskTest(10, 10, 10).test();
+        new PutTaskTest(10, 10, 10).testPerformance();
         pool.shutdown();
     }
 
@@ -46,6 +48,48 @@ public class PutTaskTest {
         }
     }
 
+    void testPerformance() {
+        timer.clear();
+        for (int i = 0; i < nParis; i++) {
+            pool.execute(new Producer());
+            pool.execute(new Consumer());
+        }
+        try {
+            barrier.await();
+            barrier.await();
+            long nsPerTime = timer.getTime() / (nParis * (long) nTrials);
+            System.out.println("Throughput: " + nsPerTime + " ns/item");
+            System.out.println(putSum.get() == takeSum.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (BrokenBarrierException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class BarrierTimer implements Runnable {
+        private boolean started;
+        private long startTime, endTime;
+
+        @Override
+        public synchronized void run() {
+            if (!started) {
+                started = true;
+                startTime = System.nanoTime();
+            } else {
+                endTime = System.nanoTime();
+            }
+        }
+
+        public synchronized void clear() {
+            started = false;
+        }
+
+        public synchronized long getTime() {
+            return endTime - startTime;
+        }
+
+    }
 
     class Producer implements Runnable {
         @Override
@@ -53,6 +97,7 @@ public class PutTaskTest {
             int seed = (this.hashCode() ^ (int) System.nanoTime());
             int sum = 0;
             try {
+                System.out.println("Producer: " + Thread.currentThread().getName() + " is ready to work");
                 barrier.await();
                 for (int i = nTrials; i > 0; i--) {
                     bb.put(seed);
@@ -95,5 +140,6 @@ public class PutTaskTest {
         y ^= (y << 7);
         return y;
     }
+
 
 }
