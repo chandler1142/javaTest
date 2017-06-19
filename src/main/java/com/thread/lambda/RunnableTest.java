@@ -6,18 +6,18 @@ package com.thread.lambda;
 public class RunnableTest {
 
 
-    public static void main(String[] args) {
-        Runnable r = () -> {
-            String name = Thread.currentThread().getName();
-            int count = 0;
-            while(!Thread.interrupted())
-                System.out.println(name + ": " + count++);
-        };
-
-        Thread thdA = new Thread(r);
-
-
-    }
+//    public static void main(String[] args) {
+//        Runnable r = () -> {
+//            String name = Thread.currentThread().getName();
+//            int count = 0;
+//            while(!Thread.interrupted())
+//                System.out.println(name + ": " + count++);
+//        };
+//
+//        Thread thdA = new Thread(r);
+//
+//
+//    }
 
 
 }
