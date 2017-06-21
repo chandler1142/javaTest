@@ -91,5 +91,10 @@
           <artifactId>mysql-connector-java</artifactId>
           <version>5.1.9</version>
       </dependency>
+      <dependency>
+          <groupId>redis.clients</groupId>
+          <artifactId>jedis</artifactId>
+          <version>RELEASE</version>
+      </dependency>
   </dependencies>
 </project>
