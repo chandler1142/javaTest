@@ -24,4 +24,8 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String toString() {
+        return "voted:" + id;
+    }
 }

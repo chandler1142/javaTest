@@ -5,6 +5,8 @@ package com.redis.chapter1;
  */
 public class Article {
 
+    private Long id;
+
     private String title;
 
     private String link;
@@ -53,5 +55,17 @@ public class Article {
 
     public void setVotes(Long votes) {
         this.votes = votes;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String toString() {
+        return "article: " + id;
     }
 }
