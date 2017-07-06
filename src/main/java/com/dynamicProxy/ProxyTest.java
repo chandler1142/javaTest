@@ -20,5 +20,6 @@ public class ProxyTest {
         business.doSth2();
         ((Business1)business).doSth1();
 
+        System.out.println("master");
     }
 }
