@@ -22,5 +22,7 @@ public class ProxyTest {
 
         System.out.println("master");
         System.out.println("mywork");
+        System.out.println("mywork2");
+
     }
 }
