@@ -12,7 +12,7 @@ public class BinaryTreeLevelOrderTraversal {
 
 
     public List<List<Integer>> levelOrder(TreeNode root) {
-        List<List<Integer>> list = new ArrayList<>();
+        List<List<Integer>> list = new ArrayList();
 
         if(root == null) {
             return list;

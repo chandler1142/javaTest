@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class BuildBST2 {
 
-    List<TreeNode> bstList = new ArrayList<>();
+    List<TreeNode> bstList = new ArrayList();
 
     public List<TreeNode> generateTrees(int n) {
 

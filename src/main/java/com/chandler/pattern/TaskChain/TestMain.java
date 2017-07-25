@@ -1,7 +1,5 @@
 package com.chandler.pattern.TaskChain;
 
-import com.sun.xml.internal.ws.client.sei.ResponseBuilder;
-
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -19,8 +17,8 @@ public class TestMain {
 //        String result = processor1.handle("Are't labdas really sexy?");
 //        System.out.println(result);
 
-        UnaryOperator<String> headerProcessing = (String text) -> "From Jack, Mario and Alan: "  + text;
-        UnaryOperator<String> spellCheckerProcessing = (String text) -> text.replaceAll("labda","lambda");
+        UnaryOperator<String> headerProcessing = (String text) -> "From Jack, Mario and Alan: " + text;
+        UnaryOperator<String> spellCheckerProcessing = (String text) -> text.replaceAll("labda", "lambda");
 
         Function<String, String> pipeline = headerProcessing.andThen(spellCheckerProcessing);
 

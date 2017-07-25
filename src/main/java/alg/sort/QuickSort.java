@@ -58,8 +58,8 @@ public class QuickSort {
         QuickSort quickSort = new QuickSort();
         quickSort.quickSort(array, 0, array.length-1);
 
-        Arrays.stream(array).forEach(n->{
-            System.out.println(n);
-        });
+//        Arrays.stream(array).forEach(n->{
+//            System.out.println(n);
+//        });
     }
 }
