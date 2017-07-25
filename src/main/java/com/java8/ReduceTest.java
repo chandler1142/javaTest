@@ -20,5 +20,6 @@ public class ReduceTest {
         System.out.println(result.get());
 
 
+
     }
 }
