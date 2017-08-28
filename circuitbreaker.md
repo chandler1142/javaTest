@@ -91,6 +91,112 @@ def receive = {
 使用CircuitBreaker伴生对象的apply或create方法将返回在调用者的线程中执行回调的CircuitBreaker。如果异步Future不必要的时候，这可以是很有用的，例如仅调用同步的API。
 
 
+package akka.learn3
 
+import java.util.Optional
+
+import akka.actor.Actor.Receive
+import akka.actor.SupervisorStrategy.{Escalate, Restart, Resume, Stop}
+import akka.actor.{Actor, ActorLogging, ActorSystem, OneForOneStrategy, PoisonPill, Props}
+
+/**
+  * Created by chandlerzhao on 2017/8/28.
+  */
+class BrokenPlateException(info: String) extends RuntimeException
+class DrunkenFoolException(info: String) extends RuntimeException
+class RestaurantFireException(info: String) extends RuntimeException
+class TiredChefException(info: String) extends RuntimeException
+
+class Manager extends Actor with ActorLogging {
+
+  val chef = context.actorOf(Props[Chef], "Chef")
+
+  override val supervisorStrategy = {
+    OneForOneStrategy() {
+      case x: BrokenPlateException => Resume
+      case d: DrunkenFoolException => Restart
+      case r: RestaurantFireException => Escalate
+      case t: TiredChefException => Stop
+      case _ => Escalate
+    }
+  }
+
+  override def preStart = {
+    println("Manager preStart")
+  }
+
+  override def postStop = {
+    println("Manager postStop")
+  }
+
+  override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
+    println("Manager preRestart")
+  }
+
+  override def postRestart(reason: Throwable): Unit = {
+    println("Manager postRestart")
+  }
+
+  override def receive: Receive = {
+    case "shut down" => {
+      context.stop(chef)
+    }
+    case msg:String => {
+      chef ! msg
+    }
+  }
+}
+
+class Chef extends Actor with ActorLogging {
+
+  override def preStart = {
+    println("Chef preStart")
+  }
+
+  override def postStop = {
+    println("Chef postStop")
+  }
+
+  override def preRestart(reason: Throwable, message: Option[Any]): Unit = {
+    println("Chef preRestart")
+  }
+
+  override def postRestart(reason: Throwable): Unit = {
+    println("Chef postRestart")
+  }
+
+  override def receive: Receive = {
+    case "1" => {
+      throw new BrokenPlateException("不小心打破了盘子")
+    }
+    case "2" => {
+      throw new DrunkenFoolException("喝酒喝喝傻了，遭到了客户投诉")
+    }
+    case "3" => {
+      throw new RestaurantFireException("不小心点火烧了店")
+    }
+    case "4" => {
+      throw new TiredChefException("干活干多了，想休息一下")
+    }
+  }
+}
+
+object Main {
+  def main(args: Array[String]) {
+    val sys = ActorSystem("system")
+    val manager = sys.actorOf(Props[Manager],"Manager")
+    manager ! "1"
+//    println("*" * 20)
+//    manager ! "2"
+//    println("*" * 20)
+//    manager ! "3"
+//    println("*" * 20)
+//    manager ! "4"
+//    println("*" * 20)
+    Thread.sleep(2000)
+//    manager ! "shut down"
+    manager ! PoisonPill
+  }
+}
 
 
