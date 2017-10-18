@@ -26,6 +26,7 @@ public class SimpleTriggerExample {
                                 .repeatForever()
                 ).build();
 
+
 //        Trigger trigger = TriggerBuilder
 //                .newTrigger()
 //                .withIdentity("dummyTriggerName", "group1")
